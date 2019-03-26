@@ -28,27 +28,17 @@ for(var i = 0; i < 16; ++i) {
 };
 
 putMovie = function(movieKey, data) {
-    console.log('entered putMovie');
-    console.log('movieKey = ' + movieKey);
     var hash = hashCode(movieKey);
-    console.log('hash = ' + hash);
     var line = [movieKey, data];
     hashArray[hash].push(line);
 };
 
 getMovie = function(movieKey) {
-    console.log('entered getMovie');
-    console.log('movieKey = ' + movieKey);
     var hash = hashCode(movieKey);
-    console.log('hash = ' + hash);
     var bucket = hashArray[hash];
-    console.log('bucket = ' + bucket);
     returnLine = null;
     bucket.forEach(function(line) {
-        console.log('line = ' + line);
-        console.log('line[0] =' + line[0]);
         if(movieKey == line[0]) {
-            console.log('line[1] = ' + line[1]);
             returnLine = line[1];
         };
     });
@@ -71,14 +61,11 @@ app.get('/', function(req, res) {
             //get data from OMDb
             axios.get(`http://www.omdbapi.com/?i=${id}&apikey=8730e0e`)
                 .then(response => {
-                    console.log('in axios.get.then');
-                    console.log(response.data.Director);
                     shortMovieData = {"Title" : response.data.Title, "Year" : response.data.Year};
                     putMovie(id, shortMovieData);
                     res.send(shortMovieData);
                 })
                 .catch(error => {
-                    console.log(error);
                 });
             return;
         };
