@@ -25,8 +25,7 @@ $ npm install nodemon
 $ npm start
 ```
 
-
-or for automatically restarting when the file changes
+or for automatically restarting when the file changes - 
 ```
 $ npm run dev
 ```
