@@ -40,6 +40,7 @@ for(var i = 0; i < 16; ++i) {
 };
 
 putMovie = function(movieKey, data) {
+    console.log('entered putMovie');
     console.log('movieKey = ' + movieKey);
     var hash = hashCode(movieKey);
     console.log('hash = ' + hash);
@@ -48,6 +49,7 @@ putMovie = function(movieKey, data) {
 };
 
 getMovie = function(movieKey) {
+    console.log('entered getMovie');
     console.log('movieKey = ' + movieKey);
     var hash = hashCode(movieKey);
     console.log('hash = ' + hash);
@@ -79,36 +81,37 @@ app.get('/', function(req, res) {
             res.send(movieData);
             console.log('sent movieData to browser');
             return;
-        };  
-        console.log('entering axios.get');
-        axios.get('http://omdbapi.com/?i=' + id + '&apikey=8730e0e')
-            .then(function (response) {
-                console.log('in axios.get.then');
-                console.log(response.data.Director);
-                shortMovieData = {"Title" : response.data.Title, "Year" : response.data.Year};
-                putMovie(id, shortMovieData);
-                res.send(shortMovieData);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        return;
+        } else { 
+            console.log('entering axios.get');
+            axios.get(`http://www.omdbapi.com/?i=${id}&apikey=8730e0e`)
+                .then(response => {
+                    console.log('in axios.get.then');
+                    console.log(response.data.Director);
+                    shortMovieData = {"Title" : response.data.Title, "Year" : response.data.Year};
+                    putMovie(id, shortMovieData);
+                    res.send(shortMovieData);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            return;
+        };
         //handle response variable
     };
 
-    var t = req.query.t;
-    if(t != null) {
-        var data = getMovie(t);
+    var title = req.query.t;
+    if(title != null) {
+        var data = getMovie(title);
         if(data != null) {
             res.send(data);
             return;
         };  
  
-        axios.get('http://omdbapi.com/?t=' + t + '&apikey=8730e0e')
+        axios.get(`http://www.omdbapi.com/?t=${title}&apikey=8730e0e`)
             .then(function (response) {
                 console.log('in axios.get.then');
-                console.log(response.data);
-                putMovie(t, response.data);
+                cconsole.log(response.data.Director);
+                putMovie(title, response.data);
                 res.send(response.data);
             })
             .catch(function (error) {
