@@ -14,18 +14,6 @@ const port = 3000;
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 app.use(morgan('dev', { stream: accessLogStream }));
 
-//const instance =axios.create({baseURL: 'http://localhost:3000'});
-/*
-$(document).ready(function() {
-    $.getJSON('https://omdbapi.com/?apikey=8730e0e&i=tt0111161', function(data) {
-        $('#movie-title').text(data.Title);
-        $('#movie-description').text(data.Description);
-        $('#movie-year').text(data.Year);
-        console.log('JSON response');
-    });
-});
-*/
-
 hashCode = function(s) {
     var h = 0, l = s.length, i = 0;
     if ( l > 0 )
@@ -72,17 +60,15 @@ getMovie = function(movieKey) {
 // tt3896198
 
 app.get('/', function(req, res) {
-    
+   //ID code 
     var id = req.query.i;
     if(id != null) {
         var movieData = getMovie(id);
-        console.log('movieData =' + movieData);
         if(movieData != null) {
             res.send(movieData);
-            console.log('sent movieData to browser');
             return;
         } else { 
-            console.log('entering axios.get');
+            //get data from OMDb
             axios.get(`http://www.omdbapi.com/?i=${id}&apikey=8730e0e`)
                 .then(response => {
                     console.log('in axios.get.then');
@@ -96,10 +82,10 @@ app.get('/', function(req, res) {
                 });
             return;
         };
-        //handle response variable
     };
 
-    var title = req.query.t;
+//Title code
+    var title = encodeURIComponent(req.query.t);
     if(title != null) {
         var data = getMovie(title);
         if(data != null) {
@@ -109,18 +95,14 @@ app.get('/', function(req, res) {
  
         axios.get(`http://www.omdbapi.com/?t=${title}&apikey=8730e0e`)
             .then(function (response) {
-                console.log('in axios.get.then');
-                cconsole.log(response.data.Director);
                 putMovie(title, response.data);
                 res.send(response.data);
             })
             .catch(function (error) {
-                console.log(error);
             });
         return;
     };
     res.send('Movie Finder');
-    console.log('in home directory');
 });
 
 // finally export the express application
