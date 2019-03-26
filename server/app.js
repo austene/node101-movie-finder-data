@@ -53,17 +53,16 @@ app.get('/', function(req, res) {
    //ID code 
     var id = req.query.i;
     if(id != null) {
-        var movieData = getMovie(id);
-        if(movieData != null) {
-            res.send(movieData);
+        var data = getMovie(id);
+        if(data != null) {
+            res.send(data);
             return;
         } else { 
             //get data from OMDb
             axios.get(`http://www.omdbapi.com/?i=${id}&apikey=8730e0e`)
                 .then(response => {
-                    shortMovieData = {"Title" : response.data.Title, "Year" : response.data.Year};
-                    putMovie(id, shortMovieData);
-                    res.send(shortMovieData);
+                    putMovie(id, response.data);
+                    res.send(response.data);
                 })
                 .catch(error => {
                 });
