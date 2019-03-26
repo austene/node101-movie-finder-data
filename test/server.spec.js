@@ -27,7 +27,7 @@ function withMovie(i) {
   }
 }
 
-
+console.log('before mock');
 mock
   .onGet('http://www.omdbapi.com', { params: { i: 'tt3896198', apiKey: '8730e0e' }})
   .replyOnce(withMovie(0))
@@ -45,16 +45,18 @@ mock
   .replyOnce(withMovie(1))
   .onGet('http://www.omdbapi.com/?apikey=8730e0e&t=baby%20driver')
   .replyOnce(withMovie(1))
-
+console.log('after mock');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe("server module", function() {
   this.timeout(6500);
   it("GET /?i=tt3896198 responds with movie data", (done) => {
+      console.log('before chai request');
 	  chai.request(app)
       .get('/?i=tt3896198')
       .end((err, res) => {
+        console.log(res);
         expect(res).to.have.status(200);
         expect(err).to.be.null;
         expect(res.body.Title).to.equal('Guardians of the Galaxy Vol. 2');
