@@ -32,5 +32,5 @@ $ npm run dev
 
 ## Now
 Deployed to NOW through URL
->https://movie-finder-data-o9e3fv0ew.now.sh
+>https://movie-finder-data-a096ztgsj.now.sh
 
